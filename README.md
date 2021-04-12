@@ -1,4 +1,4 @@
-#Application Preview
+# Application Preview
 
 Note: This application is still under development (4/12/2021)
 
