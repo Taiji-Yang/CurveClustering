@@ -2,15 +2,16 @@ import React from 'react'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import * as THREE from '../../public/threejs/node_modules/three/build/three.module.js';
 import MyVerticallyCenteredModal from './PopupWindow'
+import Dataplot from './Plot'
 
 const Testapp = (props) => {
     const mainVisRef = useRef(null);
-    const [mainWidth, changeWidth] = useState('70%');
-    const [mainHeight, changeHeight] = useState('70%');
-    let ifsplit = false;
     let ifblock = false;
     let ifhidecusor = true;
-    
+    const [traction, changetraction] = useState(null);
+    const [aflow, changeaflow] = useState(null);
+    const [modulenum, changemodulenum] = useState(null);
+    const [time, changetime] = useState(null);
 
 
     useEffect(() => {
@@ -243,6 +244,16 @@ const Testapp = (props) => {
                         body: JSON.stringify({input: Array.from(api_set), curveid: curveid})
                     }).then((res) => {
                     fetch('/result').then((res) => res.json()).then((data) => {console.log(data); scene.remove(smallcurveobjects); smallcurveobjects = new THREE.Object3D(); processdata(data)})
+                    }).then(() => {
+                        if (window.localStorage.getItem('ifsplit') === 'true'){
+                            fetch('/resultplot').then((res) => res.json()).then((data) => {
+                                console.log(data)
+                                changetraction(data['traction'])
+                                changeaflow(data['aflow'])
+                                changemodulenum(data['module_num'])
+                                changetime(data['time'])
+                            })
+                        }
                     })
                     
                 }
@@ -318,13 +329,8 @@ const Testapp = (props) => {
         if(event.keyCode === 27) {
           setshow(modalShow => !modalShow)
         }
-        else if (event.keyCode === 32){
-            ifsplit = !ifsplit
-            window.localStorage.setItem('ifsplit', ifsplit);
-            console.log(window.localStorage.getItem('ifsplit'))
-        }
       });
-
+    console.log(window.localStorage.getItem('ifsplit'))
     useEffect(() => {
         document.addEventListener("keydown", escFunction);
         return () => {
@@ -332,18 +338,39 @@ const Testapp = (props) => {
         };
     }, []);
 
-    return <>
+    if(window.localStorage.getItem('ifsplit') === 'false'){
+        return <>
         <div 
             className = 'mainvisualization' 
-            style = {{height : '100%', width: window.localStorage.getItem('ifsplit') == true? '50%':'100%', border: '10px solid rgba(0, 0, 0, 0.7)'}} 
+            style = {{height : '100%', width: window.localStorage.getItem('ifsplit') === 'true'? '50%':'100%', border: '10px solid rgba(0, 0, 0, 0.7)'}} 
             ref = {mainVisRef}
         />
         <MyVerticallyCenteredModal
-        show={modalShow}
-        backdrop = 'static'
-        
+            show={modalShow}
+            backdrop = 'static'
         />
+        </>
+    } else {
+    return <>
+        <div style = {{height: '100%', width: '100%' , display:'flex', flexDirection:'row'}}>
+            <div 
+                className = 'mainvisualization' 
+                style = {{height : '100%', width: window.localStorage.getItem('ifsplit') === 'true'? '50%':'100%', border: '10px solid rgba(0, 0, 0, 0.7)'}} 
+                ref = {mainVisRef}
+            />
+            <MyVerticallyCenteredModal
+                show={modalShow}
+                backdrop = 'static'
+            />
+            <Dataplot
+                traction = {traction}
+                aflow = {aflow}
+                modulenum = {modulenum}
+                time = {time}
+            />
+        </div>
     </>
+    }
 }
 
 export default Testapp

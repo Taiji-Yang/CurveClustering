@@ -65,13 +65,27 @@ const MyVerticallyCenteredModal = (props) => {
 
     function getNone(){
         fetch('/deleteall')
-        window.location.reload(false)
+        window.location.reload()
+    }
+
+    function analysismode(){
+      if (window.localStorage.getItem('ifsplit') === 'false'){
+        window.localStorage.setItem('ifsplit', true);
+      }
+      else {
+          window.localStorage.setItem('ifsplit', false);
+      }
+      window.location.reload()
     }
     const classes = useStyles();
     const [value, setValue] = useState(0);
     const [state, setSwitchState] = useState({
-        localcenter: false,
-
+      time: true,
+      xposition: true,
+      yposition: true,
+      traction: false,
+      aflow: false,
+      modulenum: false
     });
 
     const handleChange = (event, newValue) => {
@@ -115,13 +129,64 @@ const MyVerticallyCenteredModal = (props) => {
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={state.localcenter}
+                                checked={state.time}
                                 onChange={handleSwitchChange}
-                                name="localcenter"
-                                color='secondary'
+                                name="time"
                             />
                         }
-                        label="test"
+                        label="time"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.xposition}
+                                onChange={handleSwitchChange}
+                                name="xposition"
+                            />
+                        }
+                        label="x-position"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.yposition}
+                                onChange={handleSwitchChange}
+                                name="yposition"
+                            />
+                        }
+                        label="y-position"
+                    />
+                </FormGroup>
+                <FormGroup row>
+                <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.traction}
+                                onChange={handleSwitchChange}
+                                name="traction"
+                            />
+                        }
+                        label="traction"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.aflow}
+                                onChange={handleSwitchChange}
+                                name="aflow"
+                            />
+                        }
+                        label="aflow"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={state.modulenum}
+                                onChange={handleSwitchChange}
+                                name="modulenum"
+                            />
+                        }
+                        label="module num"
                     />
                 </FormGroup>
             </TabPanel>
@@ -135,7 +200,18 @@ const MyVerticallyCenteredModal = (props) => {
                 Item Four
             </TabPanel>
             <TabPanel value={value} index={4}>
-                Item Five
+              <div style = {{height: '50px'}}></div> 
+              <div style = {{display:'flex', flexDirection:'row'}}>
+              <div style = {{width: '122px'}}></div>
+              <Button 
+                  variant="outlined" 
+                  color="secondary" 
+                  style = {{}}
+                  onClick={analysismode}
+              >
+                  analysis mode
+              </Button>
+              </div>
             </TabPanel>
          </div>
          <div style = {{textAlign: 'center'}}>
