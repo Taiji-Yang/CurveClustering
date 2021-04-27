@@ -182,8 +182,13 @@ def read_from_frontend(input_list, curveid):
 	
 	return tuples
 
+def request_curves(features):
+	curves, _ = generate_curves(features)
+	return curves
+
 if __name__ == "__main__":
-	curves, _ = generate_curves(['cell_pos_x', 'cell_pos_y'])
+	curves, _ = generate_curves(['traction', 'aflow', 'module_num', 'time'])
+	'''
 	for i in range(len(curves)):
 		plt.plot(curves[i][0], curves[i][1], color = 'blue', alpha=0.2)
 	tuples = calculate_user_defined_matrix(1, 7, 14, curves, len(curves))
@@ -197,3 +202,5 @@ if __name__ == "__main__":
 		else:
 			plt.plot(curves[i][0][s:e], curves[i][1][s:e], color = 'orange', alpha=0.5)
 	plt.show()
+	'''
+	print(curves)
