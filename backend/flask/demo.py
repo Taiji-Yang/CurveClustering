@@ -1,19 +1,7 @@
 import numpy as np
 import os
-import keras.backend.tensorflow_backend as ktf
-from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import Normalizer
-from scipy.spatial.distance import correlation
-from sklearn.metrics.pairwise import cosine_similarity
-from scipy.special import softmax
-from sklearn.cluster import DBSCAN
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.cluster import SpectralClustering
 import statistics
-from scipy.stats import spearmanr
 import csv
 import time
 import matplotlib.pyplot as plt

@@ -1,18 +1,10 @@
 import numpy as np
 import os
-from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import Normalizer
-from scipy.spatial.distance import correlation
 from sklearn.metrics.pairwise import cosine_similarity
 import statistics
-from scipy.stats import spearmanr
 import csv
 import time
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import AgglomerativeClustering
 import similaritymeasures
 from demo import *
 import sys
