@@ -87,14 +87,29 @@ const MyVerticallyCenteredModal = (props) => {
       aflow: false,
       modulenum: false
     });
-
+    const [panel_input, setPanelInput] = useState(['cell_pos_x', 'cell_pos_y', 'time'])
+    let nameDict = {
+      time: 'time',
+      xposition: 'cell_pos_x',
+      yposition: 'cell_pos_y',
+      traction: 'traction',
+      aflow: 'aflow',
+      modulenum: 'module_num'
+    }
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     const handleSwitchChange = (event) => {
         setSwitchState({...state, [event.target.name]: event.target.checked})
+        if (event.target.checked){
+          setPanelInput(oldarray => [...oldarray, nameDict[event.target.name]])
+        } else {
+          const newstate = panel_input.filter((item) => item !== nameDict[event.target.name]);
+          setPanelInput(oldarray => newstate)
+        }
+        props.changeInput(panel_input)
     };
-
+    //console.log(panel_input)
     return (
         
       <Modal
@@ -118,13 +133,26 @@ const MyVerticallyCenteredModal = (props) => {
                 aria-label="Vertical tabs example"
                 className={classes.tabs}
             >
-                <Tab label="data" {...a11yProps(0)} />
+                <Tab label="tutorial" {...a11yProps(0)} />
+                
+                {/*
+                <Tab label="data" {...a11yProps(1)} />
                 <Tab label="clustering" {...a11yProps(1)} />
                 <Tab label="algorithm" {...a11yProps(2)} />
                 <Tab label="threshold" {...a11yProps(3)} />
-                <Tab label="options" {...a11yProps(4)} />
+                */}
+                <Tab label="options" {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
+              <ul>
+                <li style = {{paddingBottom: '8px'}}>You can rotate the visualization by pressing and <br /> holding the "←" or "→" key on your keyboard </li>
+                <li style = {{paddingBottom: '8px'}}>Once you start working on a curve, the other curves <br />will be disabled from being selected</li>
+                <li>To clear the scene, please press "Esc" on your keyboard <br /> to open the setting panel and click "CLEAR CANVAS"</li>
+              </ul>
+              <p  style = {{textAlign: 'right', fontSize: '20px'}}> -- Thanks!</p>
+            </TabPanel>
+            {/*
+            <TabPanel value={value} index={1}>
                 <FormGroup row>
                     <FormControlLabel
                         control={
@@ -190,6 +218,7 @@ const MyVerticallyCenteredModal = (props) => {
                     />
                 </FormGroup>
             </TabPanel>
+            
             <TabPanel value={value} index={1}>
                 Item Two
             </TabPanel>
@@ -199,7 +228,8 @@ const MyVerticallyCenteredModal = (props) => {
             <TabPanel value={value} index={3}>
                 Item Four
             </TabPanel>
-            <TabPanel value={value} index={4}>
+            */}
+            <TabPanel value={value} index={1}>
               <div style = {{height: '50px'}}></div> 
               <div style = {{display:'flex', flexDirection:'row'}}>
               <div style = {{width: '122px'}}></div>
@@ -209,7 +239,7 @@ const MyVerticallyCenteredModal = (props) => {
                   style = {{}}
                   onClick={analysismode}
               >
-                  analysis mode
+                  switch analysis mode
               </Button>
               </div>
             </TabPanel>

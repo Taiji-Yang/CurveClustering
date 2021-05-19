@@ -6,11 +6,11 @@ import csv
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics.pairwise import cosine_similarity
 import sys
 import math
 from scipy import signal
-import similaritymeasures
+#import similaritymeasures
 from statistics import mean
 
 '''
@@ -147,9 +147,9 @@ def calculate_distance_matrix(if_align, curves, n_curves, affinity):
                     signal_row, signal_col = align_signals(if_align, original_sig_row, original_sig_col)
                     mat[row][col] = 1-cosine_similarity([signal_row], [signal_col])[0][0]
                 else:
+                    '''
                     if affinity == "Frechet":
                         mat[row][col] = similaritymeasures.frechet_dist(curves[row], curves[col])
-                    '''
                     if affinity == "Euclidean":
                     if affinity == "Hausdorff":
                     '''

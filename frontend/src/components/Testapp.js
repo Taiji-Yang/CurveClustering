@@ -4,17 +4,21 @@ import * as THREE from '../../public/threejs/node_modules/three/build/three.modu
 import MyVerticallyCenteredModal from './PopupWindow'
 import Dataplot from './Plot'
 import { OrbitControls } from '../../public/threejs/node_modules/three/examples/jsm/controls/OrbitControls.js';
-
 const Testapp = (props) => {
     const mainVisRef = useRef(null);
-    let ifblock = false;
-    let ifhidecusor = true;
+    let ifblock = true;
+    let ifhidecusor = false;
     const [traction, changetraction] = useState(null);
     const [aflow, changeaflow] = useState(null);
     const [modulenum, changemodulenum] = useState(null);
     const [time, changetime] = useState(null);
     const [feature, changefeature] = useState(['cell_pos_x', 'cell_pos_y', 'time']);
-
+    if (window.localStorage.getItem('feature') === null){
+        window.localStorage.setItem('feature', feature)
+    }
+    function changeInput (input_from_panel){
+        //changefeature(old_array => input_from_panel)
+    }
 
     useEffect( async  () => {
         let data = null
@@ -22,7 +26,7 @@ const Testapp = (props) => {
             {   
                 method:'POST', 
                 headers:{'Accept':'application/json', 'Content-type':'application/json'},
-                body: JSON.stringify({required: feature})
+                body: JSON.stringify({required: window.localStorage.getItem('feature').split(',')})
             })
         
         let res2 = await fetch('/databaseget')
@@ -52,7 +56,6 @@ const Testapp = (props) => {
         init();
         animate();
 
-        document.body.style.cursor = "none";
 
 
 
@@ -261,7 +264,7 @@ const Testapp = (props) => {
                     let num_of_datapoints = data[intersects[0].object.name][0].length;
                     for (let i = 0; i < num_of_datapoints-1; i++){
                         if (tempcurveobjects.children[i].material.opacity != 0.9314){
-                            tempcurveobjects.children[i].material.opacity = 0.3;
+                            tempcurveobjects.children[i].material.opacity = 0.5;
                         }
                     }
                     const intersect = intersects2[0];
@@ -274,7 +277,11 @@ const Testapp = (props) => {
                         headers:{'Accept':'application/json', 'Content-type':'application/json'},
                         body: JSON.stringify({input: Array.from(api_set), curveid: curveid})
                     }).then((res) => {
-                    fetch('/result').then((res) => res.json()).then((data) => {console.log(data); all_object.remove(smallcurveobjects); smallcurveobjects = new THREE.Object3D(); processdata(data)})
+                    fetch('/result').then((res) => res.json()).then((data) => {
+                        console.log(data); 
+                        all_object.remove(smallcurveobjects);
+                        smallcurveobjects = new THREE.Object3D(); 
+                        processdata(data)})
                     }).then(() => {
                         if (window.localStorage.getItem('ifsplit') === 'true'){
                             fetch('/resultplot').then((res) => res.json()).then((data) => {
@@ -353,13 +360,12 @@ const Testapp = (props) => {
 			}    
     }, []);
 
-    const [modalShow, setshow] = useState(false)
+    const [modalShow, setshow] = useState(true)
     const escFunction = ((event) => {
         if(event.keyCode === 27) {
           setshow(modalShow => !modalShow)
         }
       });
-    console.log(window.localStorage.getItem('ifsplit'))
     useEffect(() => {
         document.addEventListener("keydown", escFunction);
         return () => {
@@ -377,6 +383,7 @@ const Testapp = (props) => {
         <MyVerticallyCenteredModal
             show={modalShow}
             backdrop = 'static'
+            changeInput = {changeInput}
         />
         </>
     } else {
@@ -390,6 +397,7 @@ const Testapp = (props) => {
             <MyVerticallyCenteredModal
                 show={modalShow}
                 backdrop = 'static'
+                changeInput = {changeInput}
             />
             <Dataplot
                 traction = {traction}

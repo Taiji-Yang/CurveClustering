@@ -9,7 +9,7 @@ app = Flask(__name__)
 tuples = None
 cdata = get_data(['traction', 'aflow', 'module_num', 'time'])
 feature = None
-
+# feature is unchangeable currently
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///curves.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
